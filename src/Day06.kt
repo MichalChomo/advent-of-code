@@ -8,7 +8,7 @@ fun main() {
     fun part1(input: String): Int = input.findPositionAfterDistinctSubstringOfSize(4)
 
     fun part2(input: String): Int = input.findPositionAfterDistinctSubstringOfSize(14)
-    
+
     val testInput = readInput("Day06_test")
     check(part1(testInput) == 7)
     check(part2(testInput) == 19)
