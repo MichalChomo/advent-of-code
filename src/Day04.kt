@@ -6,8 +6,6 @@ fun main() {
             .zipWithNext()
             .single()
 
-    fun Boolean.toInt() = if (this) 1 else 0
-
     fun IntRange.fullyContains(other: IntRange) = other.first in this && other.last in this
 
     fun IntRange.containsOrIsContained(other: IntRange) = this.fullyContains(other) || other.fullyContains(this)
