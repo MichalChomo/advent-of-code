@@ -5,6 +5,8 @@ import org.gradle.api.tasks.options.Option
 import java.io.File
 import java.time.LocalDateTime
 
+private const val RELATIVE_PATH_TO_PACKAGE = "src/main/kotlin/eu/michalchomo/adventofcode"
+
 open class AddDayTask : DefaultTask() {
 
     var dayNumber: String = "1"
@@ -28,7 +30,7 @@ open class AddDayTask : DefaultTask() {
 
     @TaskAction
     fun addDay() {
-        val srcPath = "${project.rootDir}/src/main/kotlin/eu/michalchomo/adventofcode"
+        val srcPath = "${project.rootDir}/$RELATIVE_PATH_TO_PACKAGE"
         val templateFile = File("$srcPath/DayTemplate.kt.template")
         val currentYear = LocalDateTime.now().year
         val currentYearPath = "$srcPath/year$currentYear"
