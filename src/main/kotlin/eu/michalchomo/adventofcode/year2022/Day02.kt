@@ -1,3 +1,5 @@
+package eu.michalchomo.adventofcode.year2022
+
 fun main() {
 
     val letterPairToScore = mapOf(

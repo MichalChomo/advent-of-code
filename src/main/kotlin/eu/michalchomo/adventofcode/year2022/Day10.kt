@@ -1,3 +1,8 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+
+
 fun main() {
     fun List<String>.toInstructionValuePairs() = asSequence()
         .map { it.split(" ") }

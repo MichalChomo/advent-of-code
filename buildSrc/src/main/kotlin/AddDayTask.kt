@@ -3,6 +3,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import java.io.File
+import java.time.LocalDateTime
 
 open class AddDayTask : DefaultTask() {
 
@@ -27,10 +28,17 @@ open class AddDayTask : DefaultTask() {
 
     @TaskAction
     fun addDay() {
-        val srcPath = "${project.rootDir}/src"
-        val templateFile = File("$srcPath/DayTemplate.kt")
-        applyToFileIfNotExists("$srcPath/${dayNumber.toDayName()}.kt") { templateFile.copyTo(it) }
-        createFileIfNotExists("$srcPath/${dayNumber.toDayName()}.txt")
-        createFileIfNotExists("$srcPath/${dayNumber.toDayName()}_test.txt")
+        val srcPath = "${project.rootDir}/src/main/kotlin/eu/michalchomo/adventofcode"
+        val templateFile = File("$srcPath/DayTemplate.kt.template")
+        val currentYear = LocalDateTime.now().year
+        val currentYearPath = "$srcPath/year$currentYear"
+        applyToFileIfNotExists("$currentYearPath/${dayNumber.toDayName()}.kt") {
+            it.writeText(
+                "package eu.michalchomo.adventofcode.year$currentYear\n\n" + templateFile.readText()
+                    .replace("\"Day", "\"${dayNumber.toDayName()}")
+            )
+        }
+        createFileIfNotExists("$currentYearPath/${dayNumber.toDayName()}.txt")
+        createFileIfNotExists("$currentYearPath/${dayNumber.toDayName()}_test.txt")
     }
 }

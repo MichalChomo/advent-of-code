@@ -1,3 +1,7 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+
 sealed class Packet {
     data class PacketList(val l: List<Packet>) : Packet()
     data class PacketInt(val n: Int) : Packet()

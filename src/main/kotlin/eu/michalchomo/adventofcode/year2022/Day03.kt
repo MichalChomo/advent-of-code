@@ -1,3 +1,7 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+
 fun main() {
     val itemTypeToPriority = CharRange('a', 'z').toList().plus(CharRange('A', 'Z')).zip(IntRange(1, 52).toList()).toMap()
 

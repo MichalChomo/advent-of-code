@@ -1,3 +1,7 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+
 sealed class File
 data class DataFile(val size: Long) : File()
 data class Directory(val path: String, val files: MutableList<File>) : File() {

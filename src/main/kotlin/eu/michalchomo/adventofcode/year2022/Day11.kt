@@ -1,3 +1,7 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+
 data class Monkey(
     private val items: MutableList<Long>,
     private val operation: (Long) -> Long,

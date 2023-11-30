@@ -1,3 +1,6 @@
+package eu.michalchomo.adventofcode.year2022
+
+
 import kotlin.math.abs
 import kotlin.math.max
 

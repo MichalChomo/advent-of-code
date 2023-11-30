@@ -1,3 +1,7 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+
 fun main() {
     fun List<ArrayDeque<String>>.printStacks() {
         val copy = this.toList().map { ArrayDeque(it) }

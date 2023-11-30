@@ -1,3 +1,6 @@
+package eu.michalchomo.adventofcode.year2022
+
+
 import java.util.PriorityQueue
 import kotlin.math.abs
 

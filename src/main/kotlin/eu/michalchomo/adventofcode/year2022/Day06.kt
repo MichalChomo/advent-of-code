@@ -1,3 +1,7 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+
 fun main() {
     fun String.findPositionAfterDistinctSubstringOfSize(size: Int) = this.windowed(size, 1)
         .asSequence()

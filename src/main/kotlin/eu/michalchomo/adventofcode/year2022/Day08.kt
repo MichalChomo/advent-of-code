@@ -1,3 +1,8 @@
+package eu.michalchomo.adventofcode.year2022
+
+import eu.michalchomo.adventofcode.toInt
+
+
 fun main() {
 
     fun part1(input: List<String>): Int = input.map { it.map { it.digitToInt() } }

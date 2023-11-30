@@ -1,3 +1,5 @@
+package eu.michalchomo.adventofcode.year2022
+
 fun main() {
     fun getListOfSummedElfCalories(input: String) =
         input.split("\n\n")

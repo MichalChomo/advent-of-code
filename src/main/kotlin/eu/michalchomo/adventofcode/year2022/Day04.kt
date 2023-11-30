@@ -1,3 +1,9 @@
+package eu.michalchomo.adventofcode.year2022
+
+
+import eu.michalchomo.adventofcode.toInt
+
+
 fun main() {
     fun String.getPairOfRanges() =
         this.split(",")
