@@ -1,6 +1,6 @@
 package eu.michalchomo.adventofcode.year2023
 
-val stringNumbersToIntegers = mapOf(
+val stringDigitsToIntegers = mapOf(
     "one" to 1,
     "two" to 2,
     "three" to 3,
@@ -12,6 +12,11 @@ val stringNumbersToIntegers = mapOf(
     "nine" to 9,
 )
 
+data class IndexedDigitString(val index: Int, val string: String) {
+    fun isInString(str: String): Boolean = str.substring(index).startsWith(string)
+}
+fun Pair<Int, String>.toDigitString() = IndexedDigitString(first, second)
+
 fun main() {
     fun part1(input: List<String>): Int =
         input.filter { it.isNotEmpty() }
@@ -22,23 +27,28 @@ fun main() {
 
     fun part2(input: List<String>): Int = part1(
         input.map { line ->
-            var newLine = line
-            while (true) {
-                val foundDigitString = newLine.findAnyOf(stringNumbersToIntegers.keys)?.second
-                if (foundDigitString != null) {
-                    newLine = newLine.replace(foundDigitString, stringNumbersToIntegers[foundDigitString].toString())
-                } else {
-                    newLine = newLine
-                        .replace("2ne", "21")
-                        .replace("8wo", "82")
-                        .replace("1ight", "18")
-                        .replace("3ight", "38")
-                        .replace("5ight", "58")
-                        .replace("9ight", "98")
-                    return@map newLine
-                }
+            val foundIndexedDigitStrings = mutableListOf(line.findAnyOf(stringDigitsToIntegers.keys)?.toDigitString())
+            while (foundIndexedDigitStrings.lastOrNull() != null) {
+                val startIndex = foundIndexedDigitStrings.lastOrNull()!!.index + 1
+                val foundPair = line.substring(startIndex)
+                    .findAnyOf(stringDigitsToIntegers.keys)?.let { it.copy(first = it.first + startIndex) }
+                    foundIndexedDigitStrings.add(foundPair?.toDigitString())
             }
-            "" // to satisfy compiler, map must return String
+            foundIndexedDigitStrings.filterNotNull()
+                .foldRight(line) { foundDigitString, acc ->
+                    val endIndexA = if (foundDigitString.isInString(acc)) {
+                        // Non overlapping
+                        foundDigitString.string.length
+                    } else {
+                        // Overlapping
+                        acc.substring(foundDigitString.index).indexOfFirst { it.isDigit() }
+                    }
+                    acc.replaceRange(
+                        foundDigitString.index,
+                        foundDigitString.index + endIndexA,
+                        stringDigitsToIntegers[foundDigitString.string].toString()
+                    )
+                }
         }
     )
 
