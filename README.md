@@ -17,6 +17,7 @@ generates files
  with adjusted package and the names of the text files.
 - `Day17.txt` - empty file, meant for the input of the day.
 - `Day17_test.txt` - empty file, meant for the test input of the day.
+- `Day17_answers.txt` - empty file, meant for the correct puzzle answers of the day. Used in tests.
 
 [^aoc]:
     [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.

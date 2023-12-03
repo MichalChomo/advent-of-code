@@ -36,11 +36,14 @@ open class AddDayTask : DefaultTask() {
         val currentYearPath = "$srcPath/year$currentYear"
         applyToFileIfNotExists("$currentYearPath/${dayNumber.toDayName()}.kt") {
             it.writeText(
-                "package eu.michalchomo.adventofcode.year$currentYear\n\n" + templateFile.readText()
-                    .replace("\"Day", "\"${dayNumber.toDayName()}")
+                templateFile.readText()
+                    .replace("{{YEAR_INT}}", currentYear.toString())
+                    .replace("{{DAY_NAME}}", dayNumber.toDayName())
+                    .replace("{{DAY_NUMBER_INT}}", dayNumber.toInt().toString())
             )
         }
         createFileIfNotExists("$currentYearPath/${dayNumber.toDayName()}.txt")
         createFileIfNotExists("$currentYearPath/${dayNumber.toDayName()}_test.txt")
+        createFileIfNotExists("$currentYearPath/${dayNumber.toDayName()}_answers.txt")
     }
 }

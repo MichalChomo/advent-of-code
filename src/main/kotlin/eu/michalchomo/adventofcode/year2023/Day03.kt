@@ -1,11 +1,11 @@
-package eu.michalchomo.adventofcode.year{{YEAR_INT}}
+package eu.michalchomo.adventofcode.year2023
 
 import eu.michalchomo.adventofcode.Day
 import eu.michalchomo.adventofcode.main
 
-object {{DAY_NAME}} : Day {
+object Day03 : Day {
 
-    override val number: Int = {{DAY_NUMBER_INT}}
+    override val number: Int = 3
 
     override fun part1(input: List<String>): Int = 0
 
@@ -14,5 +14,5 @@ object {{DAY_NAME}} : Day {
 }
 
 fun main() {
-    main({{DAY_NAME}})
+    main(Day03)
 }
