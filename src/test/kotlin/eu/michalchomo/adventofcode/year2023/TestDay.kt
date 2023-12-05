@@ -10,7 +10,7 @@ class TestDay {
 
     companion object {
         @JvmStatic
-        fun testDay() = listOf(Day02, Day03, Day04)
+        fun testDay() = listOf(Day02, Day03, Day04, Day05)
     }
 
     @ParameterizedTest
@@ -18,6 +18,7 @@ class TestDay {
     fun testDay(day: Day) {
         val input = readInputLines(day.name())
         val answers = readInputLines("${day.name()}_answers")
+        assertEquals(2, answers.size, "There should be 2 answers")
         assertEquals(answers[0].toInt(), day.part1(input), "Part 1 is incorrect")
         assertEquals(answers[1].toInt(), day.part2(input), "Part 2 is incorrect")
     }
