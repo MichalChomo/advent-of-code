@@ -22,9 +22,11 @@ object Day06 : Day {
     override fun part2(input: List<String>): Int = input.let {
         val raceTime = it[0].getNumber()
         val recordDistance = it[1].getNumber()
-        (1..<raceTime).map { hold ->
-            hold * (raceTime - hold)
-        }.count { totalDistance -> totalDistance > recordDistance }
+        var count = 0
+        for (hold in 1..<raceTime) {
+            if (hold * (raceTime - hold) > recordDistance) count++
+        }
+        count
     }
 
     private fun String.getNumbers(): List<Int> =
