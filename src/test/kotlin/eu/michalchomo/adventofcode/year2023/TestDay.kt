@@ -10,7 +10,7 @@ class TestDay {
 
     companion object {
         @JvmStatic
-        fun testAllDays() = listOf(Day02, Day03, Day04, Day05, Day06, Day07)
+        fun testAllDays() = listOf(Day01, Day02, Day03, Day04, Day05, Day06, Day07)
     }
 
     @ParameterizedTest
