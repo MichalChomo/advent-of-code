@@ -3,131 +3,71 @@ package eu.michalchomo.adventofcode.year2023
 import eu.michalchomo.adventofcode.Day
 import eu.michalchomo.adventofcode.main
 
-typealias Card = Char
-
 object Day07 : Day {
 
     override val number: Int = 7
 
-    override fun part1(input: List<String>): Int = input.map {
-        it.toHand()
-    }.sorted().mapIndexed { index, hand -> (index + 1) * hand.bid }.sum()
+    private val cardsOrder = listOf('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A')
+    private val cardsOrderJoker = cardsOrder.toMutableList().apply { remove('J'); addFirst('J') }
 
-    override fun part2(input: List<String>): Int = input.map {
-        it.toHand(true).toHandPart2()
-    }.sorted().mapIndexed { index, hand -> (index + 1) * hand.bid }.sum()
+    override fun part1(input: List<String>): Int = input.totalWinnings(cardsOrder, ::toType)
 
-    open class Hand(
-        val cards: List<Card>,
-        val bid: Int,
-        val type: Type,
-    ) : Comparable<Hand> {
+    override fun part2(input: List<String>): Int = input.totalWinnings(cardsOrderJoker, ::toTypeJoker)
 
-        override fun compareTo(other: Hand): Int = compareTo(other, false)
-
-        fun compareTo(other: Hand, joker: Boolean = false): Int = when {
-            this.type != other.type -> this.type.ordinal.compareTo(other.type.ordinal)
-            else -> this.cards.zip(other.cards).asSequence()
-                .map { (thisCard, otherCard) ->
-                    if (joker) thisCard.compareJoker(otherCard) else thisCard.compare(otherCard)
-                }.firstOrNull { it != 0 } ?: 0
-        }
-
-    }
-
-    class HandPart2(cards: List<Card>, bid: Int, type: Type) : Hand(cards, bid, type) {
-        override fun compareTo(other: Hand): Int = super.compareTo(other, true)
-    }
-    private fun Hand.toHandPart2() = HandPart2(this.cards, this.bid, this.type)
-
-    private fun String.toHand(joker: Boolean = false): Hand = this.split(" ")
-        .let {
-            val cards = it[0].toCharArray().toList()
-            val jokerCount = if (joker) cards.count { it == 'J' } else 0
-            val bid = it[1].toInt()
-            val cardsSet = cards.toSet()
-            return when (cardsSet.size) {
-                1 -> Hand(cards, bid, Type.FIVE_OF_A_KIND)
-                2 -> if (jokerCount > 0) {
-                    Hand(cards, bid, Type.FIVE_OF_A_KIND)
-                } else if (cards.count { it == cardsSet.first() }.let { it == 1 || it == 4 }) {
-                    Hand(cards, bid, Type.FOUR_OF_A_KIND)
+    private fun List<String>.totalWinnings(cardsOrder: List<Char>, toTypeFun: (String) -> Type) =
+        this.map { it.toHand(toTypeFun) }
+            .sortedWith { a, b ->
+                val typeCompare = a.type.compareTo(b.type)
+                if (typeCompare != 0) {
+                    typeCompare
                 } else {
-                    Hand(cards, bid, Type.FULL_HOUSE)
-                }
-
-                5 -> if (jokerCount == 1) {
-                    Hand(cards, bid, Type.ONE_PAIR)
-                } else {
-                    Hand(cards, bid, Type.HIGH_CARD)
-                }
-
-                else -> when (jokerCount) {
-                    0 -> when (cards.countPairs()) {
-                            0 -> Hand(cards, bid, Type.THREE_OF_A_KIND)
-                            1 -> Hand(cards, bid, Type.ONE_PAIR)
-                            2 -> Hand(cards, bid, Type.TWO_PAIRS)
-                            else -> throw IllegalStateException("Invalid input")
-                        }
-
-                    1 -> when (cardsSet.size) {
-                        3 -> when (cards.countPairs()) {
-                            0 -> if (cards.countThrees() == 0) {
-                                Hand(cards, bid, Type.ONE_PAIR)
-                            } else {
-                                Hand(cards, bid, Type.FOUR_OF_A_KIND)
-                            }
-                            1 -> Hand(cards, bid, Type.FOUR_OF_A_KIND)
-                            2 -> Hand(cards, bid, Type.FULL_HOUSE)
-                            else -> throw IllegalStateException("Invalid input")
-                        }
-                        4 -> Hand(cards, bid, Type.THREE_OF_A_KIND)
-                        else -> throw IllegalStateException("Invalid input")
-                    }
-
-                    2 -> when (cardsSet.size) {
-                        3 -> when (cards.countPairs()) {
-                            1 -> Hand(cards, bid, Type.FOUR_OF_A_KIND)
-                            2 -> Hand(cards, bid, Type.FOUR_OF_A_KIND)
-                            else -> throw IllegalStateException("Invalid input")
-                        }
-                        4 -> Hand(cards, bid, Type.THREE_OF_A_KIND)
-                        else -> throw IllegalStateException("Invalid input")
-                    }
-
-                    3 -> Hand(cards, bid, Type.FOUR_OF_A_KIND)
-                    else -> throw IllegalStateException("Invalid input")
+                    a.cards.zip(b.cards).asSequence()
+                        .map { (ac, bc) -> cardsOrder.indexOf(ac).compareTo(cardsOrder.indexOf(bc)) }
+                        .filter { it != 0 }.firstOrNull() ?: 0
                 }
             }
-        }
+            .mapIndexed { index, hand -> (index + 1) * hand.bid }
+            .sum()
+
+    data class Hand(val cards: String, val bid: Int, val type: Type)
+
+    private fun String.toHand(toTypeFun: (String) -> Type): Hand =
+        this.split(" ").let { Hand(it[0], it[1].toInt(), toTypeFun(it[0])) }
 
     enum class Type {
         HIGH_CARD, ONE_PAIR, TWO_PAIRS, THREE_OF_A_KIND, FULL_HOUSE, FOUR_OF_A_KIND, FIVE_OF_A_KIND
     }
 
-    private fun List<Card>.countPairs() = this.groupBy { it }.values.sumOf { if (it.size % 2 == 0) it.size / 2 else 0 }
-    private fun List<Card>.countThrees() = this.groupBy { it }.values.count { it.size == 3 }
-
-    private fun Card.compare(other: Card) = if (this.isDigit() && other.isDigit()) {
-        this.code.compareTo(other.code)
-    } else if (this.isDigit() && !other.isDigit()) {
-        -1
-    } else if (!this.isDigit() && other.isDigit()) {
-        1
-    } else {
-        when (this) {
-            'A' -> if (other == 'A') 0 else 1
-            'K' -> if (other == 'A') -1 else if (other == 'K') 0 else 1
-            'Q' -> if (other == 'A' || other == 'K') -1 else if (other == 'Q') 0 else 1
-            'J' -> if (other == 'A' || other == 'K' || other == 'Q') -1 else if (other == 'J') 0 else 1
-            'T' -> if (other == 'A' || other == 'K' || other == 'Q' || other == 'J') -1 else 0
-            else -> throw IllegalStateException("Invalid input")
+    private fun toType(cards: String): Type {
+        val cardsCount = cards.groupBy { it }.values.map { it.size }.sortedDescending()
+        return when (cardsCount) {
+            listOf(5) -> Type.FIVE_OF_A_KIND
+            listOf(4, 1) -> Type.FOUR_OF_A_KIND
+            listOf(3, 2) -> Type.FULL_HOUSE
+            listOf(3, 1, 1) -> Type.THREE_OF_A_KIND
+            listOf(2, 2, 1) -> Type.TWO_PAIRS
+            listOf(2, 1, 1, 1) -> Type.ONE_PAIR
+            else -> Type.HIGH_CARD
         }
     }
 
-    private fun Card.compareJoker(other: Card) = if (this == 'J' || other == 'J') {
-        if (this == 'J' && other == 'J') 0 else if (this == 'J') -1 else 1
-    } else this.compare(other)
+    private fun toTypeJoker(cards: String): Type {
+        if ('J' !in cards) return toType(cards)
+        val cardsCount = cards.groupingBy { it }.eachCount().values.sortedDescending()
+        return if (cardsCount.size < 3) {
+            // [5], [4, 1], [3, 2]
+            Type.FIVE_OF_A_KIND
+        } else {
+            when (cardsCount) {
+                listOf(3, 1, 1) -> Type.FOUR_OF_A_KIND
+                listOf(2, 2, 1) -> if (cards.jokersCount() == 2) Type.FOUR_OF_A_KIND else Type.FULL_HOUSE
+                listOf(2, 1, 1, 1) -> Type.THREE_OF_A_KIND
+                else -> Type.ONE_PAIR
+            }
+        }
+    }
+
+    private fun String.jokersCount(): Int = this.count { it == 'J' }
 
 }
 
