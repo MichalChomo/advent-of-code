@@ -12,9 +12,9 @@ object Day06 : Day {
         val distances = it[1].getNumbers()
         val zip = times.zip(distances)
         zip.map { (raceTime, recordDistance) ->
-            (1..<raceTime).map { hold ->
-                hold * (raceTime - hold)
-            }.count { totalDistance -> totalDistance > recordDistance }
+            (1..<raceTime).count { hold ->
+                hold * (raceTime - hold) > recordDistance
+            }
         }
             .reduce(Int::times)
     }
@@ -22,11 +22,9 @@ object Day06 : Day {
     override fun part2(input: List<String>): Int = input.let {
         val raceTime = it[0].getNumber()
         val recordDistance = it[1].getNumber()
-        var count = 0
-        for (hold in 1..<raceTime) {
-            if (hold * (raceTime - hold) > recordDistance) count++
+        (1..<raceTime).count { hold ->
+            hold * (raceTime - hold) > recordDistance
         }
-        count
     }
 
     private fun String.getNumbers(): List<Int> =
