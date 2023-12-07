@@ -25,38 +25,20 @@ object Day01 : Day {
                 .first().toString()).toInt()
         }
 
-    override fun part2(input: List<String>): Int = part1(
-        input.map { line ->
-            val foundIndexedDigitStrings = mutableListOf(line.findAnyOf(stringDigitsToIntegers.keys)?.toDigitString())
-            while (foundIndexedDigitStrings.lastOrNull() != null) {
-                val startIndex = foundIndexedDigitStrings.lastOrNull()!!.index + 1
-                val foundPair = line.substring(startIndex)
-                    .findAnyOf(stringDigitsToIntegers.keys)?.let { it.copy(first = it.first + startIndex) }
-                foundIndexedDigitStrings.add(foundPair?.toDigitString())
-            }
-            foundIndexedDigitStrings.filterNotNull()
-                .foldRight(line) { foundDigitString, acc ->
-                    val endIndexA = if (foundDigitString.isInString(acc)) {
-                        // Non overlapping
-                        foundDigitString.string.length
-                    } else {
-                        // Overlapping
-                        acc.substring(foundDigitString.index).indexOfFirst { it.isDigit() }
-                    }
-                    acc.replaceRange(
-                        foundDigitString.index,
-                        foundDigitString.index + endIndexA,
-                        stringDigitsToIntegers[foundDigitString.string].toString()
-                    )
+    override fun part2(input: List<String>): Int = input.sumOf { line ->
+        line.foldIndexed("") { i, acc, c ->
+            if (c.isDigit()) {
+                acc + c
+            } else {
+                val num = stringDigitsToIntegers.keys.find { line.substring(i).startsWith(it) }
+                if (num != null) {
+                    acc + stringDigitsToIntegers[num]
+                } else {
+                    acc
                 }
-        }
-    )
-
-    data class IndexedDigitString(val index: Int, val string: String) {
-        fun isInString(str: String): Boolean = str.substring(index).startsWith(string)
+            }
+        }.let { it[0].digitToInt() * 10 + it.last().digitToInt() }
     }
-
-    private fun Pair<Int, String>.toDigitString() = IndexedDigitString(first, second)
 
 }
 
