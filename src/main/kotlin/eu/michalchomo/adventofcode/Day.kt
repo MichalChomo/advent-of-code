@@ -5,6 +5,6 @@ interface Day {
 
     fun name() = "Day%02d".format(number)
 
-    fun part1(input: List<String>): Int
-    fun part2(input: List<String>): Int
+    fun part1(input: List<String>): String
+    fun part2(input: List<String>): String
 }

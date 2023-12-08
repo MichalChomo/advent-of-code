@@ -7,7 +7,7 @@ object Day03 : Day {
 
     override val number: Int = 3
 
-    override fun part1(input: List<String>): Int = input.addFirstAndLastBlank()
+    override fun part1(input: List<String>): String = input.addFirstAndLastBlank()
         .windowed(3, 1)
         .sumOf { window ->
             val upperLine = window[0]
@@ -34,9 +34,9 @@ object Day03 : Day {
                         bottomLine.substring(startIndex, endIndex).any { it.isSymbol() }
             }
                 .sumOf { it.second.toInt() }
-        }
+        }.toString()
 
-    override fun part2(input: List<String>): Int = input.addFirstAndLastBlank()
+    override fun part2(input: List<String>): String = input.addFirstAndLastBlank()
         .windowed(3, 1) { window ->
             val upperLine = window[0]
             val currentLine = window[1]
@@ -47,7 +47,7 @@ object Day03 : Day {
                         currentLine.findAdjacentNumbersAtIndex(index) + bottomLine.findAdjacentNumbersAtIndex(index)
                 if (adjacentNumbers.size == 2) adjacentNumbers.reduce(Int::times) else 0
             }
-        }.sumOf { it }
+        }.sumOf { it }.toString()
 
     private fun Char.isSymbol() = this != '.' && !this.isDigit()
 

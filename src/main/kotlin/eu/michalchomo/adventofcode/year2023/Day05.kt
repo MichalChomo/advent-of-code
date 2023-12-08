@@ -10,7 +10,7 @@ object Day05 : Day {
 
     override val number: Int = 5
 
-    override fun part1(input: List<String>): Int = input.split { line -> line.isEmpty() || !line[0].isDigit() }
+    override fun part1(input: List<String>): String = input.split { line -> line.isEmpty() || !line[0].isDigit() }
         .fold(mutableListOf<MutableList<Long>>().apply {
             val seeds = input[0].split(": ", " ")
             seeds.slice(1..<seeds.size).map { it.toLong() }.forEach { seed ->
@@ -29,9 +29,9 @@ object Day05 : Day {
                 }
             }
             destinationLists
-        }.minOf { it.lastOrNull() ?: Long.MAX_VALUE }.toInt()
+        }.minOf { it.lastOrNull() ?: Long.MAX_VALUE }.toString()
 
-    override fun part2(input: List<String>): Int = input.split { line -> line.isEmpty() || !line[0].isDigit() }
+    override fun part2(input: List<String>): String = input.split { line -> line.isEmpty() || !line[0].isDigit() }
         .fold(mutableListOf<MutableList<List<LongRange>>>().apply {
             val seeds = input[0].split(": ", " ")
             seeds.slice(1..<seeds.size).chunked(2).map { range ->
@@ -61,7 +61,7 @@ object Day05 : Day {
                 )
             }
             destinationRangeLists
-        }.minOf { it.last().minOf { it.first } }.toInt()
+        }.minOf { it.last().minOf { it.first } }.toString()
 
     private fun List<String>.toSourceRangesToDestinationStarts() = this.associate { line ->
         val split = line.split(' ')

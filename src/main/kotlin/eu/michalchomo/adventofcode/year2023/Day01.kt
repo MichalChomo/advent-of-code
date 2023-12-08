@@ -19,13 +19,13 @@ object Day01 : Day {
         "nine" to 9,
     )
 
-    override fun part1(input: List<String>): Int = input.filter { it.isNotEmpty() }
+    override fun part1(input: List<String>): String = input.filter { it.isNotEmpty() }
         .sumOf { line ->
             (line.dropWhile { !it.isDigit() }.first().toString() + line.reversed().dropWhile { !it.isDigit() }
                 .first().toString()).toInt()
-        }
+        }.toString()
 
-    override fun part2(input: List<String>): Int = input.sumOf { line ->
+    override fun part2(input: List<String>): String = input.sumOf { line ->
         line.foldIndexed("") { i, acc, c ->
             if (c.isDigit()) {
                 acc + c
@@ -38,7 +38,7 @@ object Day01 : Day {
                 }
             }
         }.let { it[0].digitToInt() * 10 + it.last().digitToInt() }
-    }
+    }.toString()
 
 }
 

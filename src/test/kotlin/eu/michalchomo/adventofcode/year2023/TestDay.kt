@@ -19,7 +19,7 @@ class TestDay {
         val input = readInputLines(day.name())
         val answers = readInputLines("${day.name()}_answers")
         assertEquals(2, answers.size, "There should be 2 answers")
-        assertEquals(answers[0].toInt(), day.part1(input), "Part 1 is incorrect")
-        assertEquals(answers[1].toInt(), day.part2(input), "Part 2 is incorrect")
+        assertEquals(answers[0], day.part1(input), "Part 1 is incorrect")
+        assertEquals(answers[1], day.part2(input), "Part 2 is incorrect")
     }
 }

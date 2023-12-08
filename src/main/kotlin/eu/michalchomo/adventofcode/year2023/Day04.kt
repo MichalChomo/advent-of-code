@@ -10,12 +10,12 @@ object Day04 : Day {
 
     override val number: Int = 4
 
-    override fun part1(input: List<String>): Int = input.map { line ->
+    override fun part1(input: List<String>): String = input.map { line ->
         BigInteger.ONE.shl(line.getMatchingNumbers().size - 1)
-    }.reduce(BigInteger::plus).toInt()
+    }.reduce(BigInteger::plus).toString()
 
 
-    override fun part2(input: List<String>): Int =
+    override fun part2(input: List<String>): String =
         input.foldIndexed(mutableMapOf<Int, CountMatchingToOccurrences>()) { i, acc, line ->
             val currentCardIndex = i + 1
             val matchingNumbers = line.getMatchingNumbers()
@@ -28,7 +28,7 @@ object Day04 : Day {
                 }
             }
             acc
-        }.values.sumOf { it.second }
+        }.values.sumOf { it.second }.toString()
 
     private fun String.getMatchingNumbers(): Set<Int> = this.split(':', '|')
         .drop(1)

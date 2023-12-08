@@ -10,9 +10,9 @@ object Day07 : Day {
     private val cardsOrder = listOf('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A')
     private val cardsOrderJoker = cardsOrder.toMutableList().apply { remove('J'); addFirst('J') }
 
-    override fun part1(input: List<String>): Int = input.totalWinnings(cardsOrder, ::toType)
+    override fun part1(input: List<String>): String = input.totalWinnings(cardsOrder, ::toType)
 
-    override fun part2(input: List<String>): Int = input.totalWinnings(cardsOrderJoker, ::toTypeJoker)
+    override fun part2(input: List<String>): String = input.totalWinnings(cardsOrderJoker, ::toTypeJoker)
 
     private fun List<String>.totalWinnings(cardsOrder: List<Char>, toTypeFun: (String) -> Type) =
         this.map { it.toHand(toTypeFun) }
@@ -28,6 +28,7 @@ object Day07 : Day {
             }
             .mapIndexed { index, hand -> (index + 1) * hand.bid }
             .sum()
+            .toString()
 
     data class Hand(val cards: String, val bid: Int, val type: Type)
 
