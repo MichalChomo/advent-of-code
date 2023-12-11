@@ -2,6 +2,7 @@ package eu.michalchomo.adventofcode.year2023
 
 import eu.michalchomo.adventofcode.Day
 import eu.michalchomo.adventofcode.main
+import eu.michalchomo.adventofcode.toCharMatrix
 
 object Day10 : Day {
 
@@ -25,8 +26,6 @@ object Day10 : Day {
         }
 
     }.toString()
-
-    private fun List<String>.toCharMatrix() = this.map { it.toCharArray() }.toTypedArray()
 
     private fun Pair<Int, Int>.directions(pipe: Char, direction: Pair<Int, Int>): Pair<Pair<Int, Int>, Pair<Int, Int>> {
         val newDirection = when (direction) {

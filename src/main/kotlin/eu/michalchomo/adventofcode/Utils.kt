@@ -54,6 +54,8 @@ fun LongRange.removeIntersectWith(other: LongRange): List<LongRange> = this.inte
     }
 } ?: listOf(this)
 
+fun List<String>.toCharMatrix() = this.map { it.toCharArray() }.toTypedArray()
+
 fun main(day: Day) {
     val testInput = eu.michalchomo.adventofcode.year2023.readInputLines("${day.name()}_test")
     println(day.part1(testInput))
