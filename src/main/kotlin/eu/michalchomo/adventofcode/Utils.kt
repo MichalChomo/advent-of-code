@@ -18,10 +18,10 @@ fun linesAsInts(lines: List<String>) = lines.map { l -> l.toInt() }
 fun Boolean.toInt() = if (this) 1 else 0
 
 fun <T> List<T>.split(includeEmpty: Boolean = false, isDelimiter: (T) -> Boolean) =
-    this.fold(mutableListOf<List<T>>() to mutableListOf<T>()) { (allParts, currentPart), element ->
-        if (isDelimiter(element) || this.lastOrNull() == element) {
+    this.foldIndexed(mutableListOf<List<T>>() to mutableListOf<T>()) { index, (allParts, currentPart), element ->
+        if (isDelimiter(element) || index == this.size - 1) {
             if (includeEmpty || currentPart.isNotEmpty()) {
-                if (this.lastOrNull() == element) currentPart.add(element)
+                if (index == this.size - 1) currentPart.add(element)
                 allParts.add(currentPart.toList())
             }
             currentPart.clear()
@@ -54,7 +54,14 @@ fun LongRange.removeIntersectWith(other: LongRange): List<LongRange> = this.inte
     }
 } ?: listOf(this)
 
-fun List<String>.toCharMatrix() = this.map { it.toCharArray() }.toTypedArray()
+typealias CharMatrix = Array<CharArray>
+fun List<String>.toCharMatrix(): CharMatrix = this.map { it.toCharArray() }.toTypedArray()
+fun CharMatrix.transpose(): CharMatrix = this[0].indices.map { colIndex ->
+    this.indices.fold(CharArray(this.size)) { acc, rowIndex -> acc.apply { acc[rowIndex] = this@transpose[rowIndex][colIndex] } }
+}.toTypedArray()
+
+fun <T> T.println(): T = this.also { println(it) }
+fun <T> List<T>.printLines(): List<T> = this.onEach { println(it) }
 
 fun main(day: Day) {
     val testInput = eu.michalchomo.adventofcode.year2023.readInputLines("${day.name()}_test")
