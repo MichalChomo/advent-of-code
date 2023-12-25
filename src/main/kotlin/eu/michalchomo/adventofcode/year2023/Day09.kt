@@ -26,15 +26,12 @@ object Day09 : Day {
         while (extrapolation.last().toSet().size > 1) {
             extrapolation.add(
                 extrapolation.last().drop(1)
-                    .mapIndexed { i, it -> it.diff(extrapolation.last()[i]) }
+                    .mapIndexed { i, it -> it - (extrapolation.last()[i]) }
                     .toList()
             )
         }
         return extrapolate(extrapolation)
     }
-
-    private fun Int.diff(other: Int) =
-        (kotlin.math.max(this, other) - kotlin.math.min(this, other)) * if (this < other) -1 else 1
 
 }
 

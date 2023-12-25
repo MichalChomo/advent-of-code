@@ -37,6 +37,8 @@ fun LongRange.intersect(other: LongRange): LongRange? {
     return if (start <= endInclusive) start..endInclusive else null
 }
 
+fun IntRange.contains(other: IntRange): Boolean = this.first <= other.first && this.last >= other.last
+
 fun LongRange.removeIntersectWith(other: LongRange): List<LongRange> = this.intersect(other)?.let { intersect ->
     if (intersect.first == this.first && intersect.last == this.last) {
         emptyList()
@@ -62,6 +64,7 @@ fun CharMatrix.transpose(): CharMatrix = this[0].indices.map { colIndex ->
 
 fun <T> T.println(): T = this.also { println(it) }
 fun <T> List<T>.printLines(): List<T> = this.onEach { println(it) }
+
 
 fun main(day: Day) {
     val testInput = eu.michalchomo.adventofcode.year2023.readInputLines("${day.name()}_test")
