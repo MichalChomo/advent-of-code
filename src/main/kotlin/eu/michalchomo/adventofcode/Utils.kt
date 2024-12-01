@@ -67,11 +67,11 @@ fun <T> List<T>.printLines(): List<T> = this.onEach { println(it) }
 
 
 fun main(day: Day) {
-    val testInput = eu.michalchomo.adventofcode.year2023.readInputLines("${day.name()}_test")
+    val testInput = eu.michalchomo.adventofcode.year2024.readInputLines("${day.name()}_test")
     println(day.part1(testInput))
     println(day.part2(testInput))
 
-    val input = eu.michalchomo.adventofcode.year2023.readInputLines(day.name())
+    val input = eu.michalchomo.adventofcode.year2024.readInputLines(day.name())
     println(day.part1(input))
     println(day.part2(input))
 }
